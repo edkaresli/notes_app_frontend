@@ -66,6 +66,10 @@ typings/
 /.pnp
 .pnp.js
 
+# CSS files since we're using SASS
+*.css
+*.css.map 
+
 # testing
 /coverage
 
