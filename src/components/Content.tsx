@@ -2,14 +2,23 @@ import React from 'react';
 
 import './Content.css';
 
-class Content extends React.Component {
-  constructor(props: any) {
+export interface INote {
+  note_id: number 
+  note_title: string 
+  note_body: string 
+}
+
+export interface INotes {
+  notes: INote[]
+}
+class Content extends React.Component<INotes, INotes> {
+  constructor(props: INotes) {
       super(props);
 
-      this.state = {};
+      this.state = { notes: [] };
   }
 
-  render() {
+  render() { 
     return (
       <div id="maincontent">
         <p>Hi there!</p>
