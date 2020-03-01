@@ -17,6 +17,10 @@ const useStyles = makeStyles({
       borderTop: '1px solid #eeeeee',
       visibility: 'visible' 
     },
+    noteDate: {
+      fontSize: 14,
+      color: '#0066ff' 
+    },
     title: {
       fontSize: 18,
     },
@@ -29,8 +33,6 @@ const useStyles = makeStyles({
     }
   });
 
-
-// export default function NoteCard (props: INote & INoteHandlers ) {
 const NoteCard = (props: INote & INoteHandlers) => {
      
   const [noteID, setNoteID] = useState<number>(props.note_id);
@@ -38,6 +40,12 @@ const NoteCard = (props: INote & INoteHandlers) => {
   const [note_body, setNoteBody] = useState<string>(props.note_body);
   const [open, setOpen] = useState<boolean>(false);
   
+  const datetime = (dt: number) => {
+    let date: Date = new Date(dt);
+    let result: string = date.toLocaleDateString() + ':' + date.toLocaleTimeString();
+    return result;
+  }
+
   const delNote = () => {
     const current_id = noteID;
     props.handleDeleteNote(current_id);       
@@ -66,14 +74,17 @@ const NoteCard = (props: INote & INoteHandlers) => {
 
   return (                 
     <>
-    <Card key={noteID} className={classes.root} >
+    <Card key={noteID} className={classes.root} >        
         <CardContent>
-            <Typography className={classes.title} color="textPrimary" gutterBottom>
-            { note_title }
-            </Typography>
-            <Typography variant="h5" component="h2">            
-            { note_body }
-            </Typography>               
+          <Typography className={classes.noteDate}>
+            {datetime(noteID)}
+          </Typography>  
+          <Typography className={classes.title} color="textPrimary" gutterBottom>
+          { note_title }
+          </Typography>
+          <Typography variant="h5" component="h2">            
+          { note_body }
+          </Typography>               
         </CardContent>
         <CardActions>
             <Button id="edNote" size="small" variant="contained" color="primary" onClick={edNote}>Edit</Button>

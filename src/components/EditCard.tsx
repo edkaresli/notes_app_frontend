@@ -22,10 +22,6 @@ export default function EditCard(props: IEditNote) {
     setBody(event.target.value);
   };
 
-//   const handleClickOpen = () => {
-//     setOpen(true);
-//   };
-
   const handleCloseCancel = () => {
     setOpen(false);
     props.closeDialog('', '');    
@@ -34,8 +30,7 @@ export default function EditCard(props: IEditNote) {
   const handleCloseAccept = () => {
     setOpen(false);    
     console.log("Inside EditCard: ", title, body);
-    // setTitle(title);
-    // setBody(body);
+    
     props.closeDialog(title, body);
   };
 

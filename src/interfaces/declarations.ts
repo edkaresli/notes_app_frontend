@@ -9,11 +9,18 @@ export interface INote {
     notes: INote[]
   }
 
-  export interface IProps {
-    notes: INote[];
+  export interface IProps {    
     dataLoaded: boolean;
   }
 
+  export interface IAppState {
+    dataLoaded: boolean;
+  }
+
+  export interface IContentState {
+    dataLoaded: boolean;
+    notes: INote[];
+  }
   export interface IFunc {
     handleAddNote(str1: string, str2: string ): void;
   }

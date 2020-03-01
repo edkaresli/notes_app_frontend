@@ -1,75 +1,85 @@
 import React from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { Box, Button, TextField } from '@material-ui/core';
+import { createStyles, withStyles, Theme, StyleRules } from '@material-ui/core/styles';
+import { Box, Button, TextField, StyledComponentProps, createMuiTheme } from '@material-ui/core';
 
 import { INote, IFunc } from '../interfaces/declarations';
 
 import './NoteForm.css';
 
 
-// import { isUserWhitespacable } from '@babel/types';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
+const styles = (theme?: Theme): StyleRules<any> => { 
+    return {
+      root: {
       '& .MuiTextField-root': {
-        margin: theme.spacing(1) //,
-        //width: 200,
+        margin: theme? theme.spacing(1) : 1 
       },
       display: "flex",
       flexDirection: "column",
       marginLeft: "30%",
       marginRight: "30%"
     },
-  }),
-);
-
-const NoteForm: React.FC<IFunc> = (props) => {
-  
-  const handleSubmit = (event: any) => {
-    event.preventDefault();
   }
-  
-  const [note_title, setNoteTitle] = React.useState('');
-  const [note_body, setNoteBody] = React.useState('');
-
-  const handleChangeNoteTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNoteTitle(event.target.value);
-  };
-  
-  const handleChangeNoteBody = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNoteBody(event.target.value);
-  };
-
-  const classes = useStyles();
-
-  const addNote = () => {
-    // console.log("Note title: ", note_title);
-    // console.log("Note body: ", note_body);
-    if(note_title === '' || note_body === '') 
-      return;
-    props.handleAddNote(note_title, note_body);
-    setNoteTitle("");
-    setNoteBody("");
-  }
-
-  // const handleAddNote = (event: any) => {
-  //   const date = (new Date()).toDateString();     
-  //   const newNote: INote = { note_id: Date.now(), note_title, note_body }
-  //   // Using Fetch to post the new note:
-  //   const request = new Request('https://localhost:5000/notes/', { method: 'POST', body: JSON.stringify(newNote) });
-  // } 
-  // TODO: Do I need a <form></form> tag? maybe just a <Box></Box> is enough?!
-  return (
-    <form className={classes.root} noValidate autoComplete="off" onSubmit={handleSubmit}>     
-      <Box> 
-        <TextField id="filled-basic" label="Note Title" variant="filled" fullWidth value={note_title} onChange={handleChangeNoteTitle}/>
-        <TextField id="filled-multiline-static" label="Note Body" multiline rows="4" 
-          fullWidth variant="filled" value={note_body} onChange={handleChangeNoteBody} /> 
-        <Button variant="contained" color="primary" onClick={addNote}>Add Note</Button>
-      </Box>
-    </form>
-  );
+}
+ 
+interface IState {
+  note_title: string;
+  note_body: string;
 }
 
-export default NoteForm;
+class NoteForm extends React.PureComponent<IFunc & StyledComponentProps, IState> {
+  constructor(props: IFunc & StyledComponentProps) {
+    super(props);
+
+    this.state = {
+      note_title: '',
+      note_body: ''
+    }
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChangeNoteTitle = this.handleChangeNoteTitle.bind(this);
+    this.handleChangeNoteBody = this.handleChangeNoteBody.bind(this);
+    this.addNote = this.addNote.bind(this);
+  }
+  
+  private handleSubmit(event: any) {
+    event.preventDefault();
+  }
+
+  private handleChangeNoteTitle(event: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({ note_title: event.target.value })
+  }
+
+  private handleChangeNoteBody(event: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({ note_body: event.target.value })
+  }
+
+  private addNote() {
+    
+    if(this.state.note_title === '' || this.state.note_body === '') 
+      return;
+    this.props.handleAddNote(this.state.note_title, this.state.note_body);
+    this.setState({ note_title: '', note_body: '' });
+  }
+  
+  render() {
+   
+    const note_title = this.state.note_title;
+    const note_body  = this.state.note_body;
+    const titleStyle = { marginTop: '10px', marginBottom: '5px' }
+
+    return (    
+      <form style={ {marginLeft: '30%', marginRight: '30%'} } noValidate autoComplete="off" onSubmit={this.handleSubmit}>
+        <Box> 
+          <TextField id="filled-basic" label="Note Title" style={titleStyle} variant="filled" fullWidth value={note_title} onChange={this.handleChangeNoteTitle}/>
+          <TextField id="filled-multiline-static" label="Note Body" multiline rows="4" 
+            fullWidth variant="filled" value={note_body} onChange={this.handleChangeNoteBody} /> 
+          <Button style={ {marginTop:'10px'}} variant="contained" color="primary" onClick={this.addNote}>Add Note</Button>
+        </Box>    
+      </form>                
+    );
+  }
+  
+}
+
+const StyledComponent = withStyles(styles)(NoteForm);
+export default StyledComponent; // NoteForm;
