@@ -1,3 +1,16 @@
+
+Instructions: 
+
+1. git clone
+
+2. cd notes_app_frontend
+
+3. npm install
+
+4. npm start
+
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
